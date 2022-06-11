@@ -10,11 +10,11 @@ interface PageComponentProps {
 export const Page = (props: PageComponentProps) => {
     const { pageName } = props
 
-    const trees1 = require('../../assets/trees1.png')
-    const trees2 = require('../../assets/trees2.png')
-    const trees3 = require('../../assets/trees3.png')
-    const trees4 = require('../../assets/trees4.png')
-    const trees5 = require('../../assets/trees5.png')
+    const trees1 = 'https://i.imgur.com/UoD91zv.png'
+    const trees2 = 'https://i.imgur.com/D9no82p.png'
+    const trees3 = 'https://i.imgur.com/TbfzchU.png'
+    const trees4 = 'https://i.imgur.com/HHmiQm3.png'
+    const trees5 = 'https://i.imgur.com/oiIZuLm.png'
 
     const [ backgroundArray ] = useState([ trees1, trees2, trees3, trees4, trees5 ])
     const [ bgOptions ] = useState([0,1,2,3,4])
