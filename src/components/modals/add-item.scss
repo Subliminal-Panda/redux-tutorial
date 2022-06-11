@@ -1,0 +1,26 @@
+@import '../../variables.scss';
+
+.button-wrap {
+    padding-right: 5rem;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+    z-index: 100;
+
+    button {
+        position: fixed;
+        z-index: 100;
+        font-size: 2rem;
+        color: $cream;
+        background-color: $pink-light;
+        border: .2rem solid $purple-light;
+        border-radius: 1.5rem;
+
+        &:hover {
+            color: $cream;
+            background-color: $pink-medium;
+            border: .2rem solid $purple;
+        }
+    }
+}

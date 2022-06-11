@@ -1,0 +1,60 @@
+﻿@import '../../variables.scss';
+
+.header {
+    height: 11.65rem;
+    width: 100%;
+    background-color: $cream-light;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: .3rem solid $purple-dark;
+    z-index: 1;
+}
+
+.header-wrap {
+    height: 12rem;
+    width: 100vw;
+    position: fixed;
+    z-index: 1;
+    border-bottom: .2rem solid $purple-dark;
+    background-color: $cream;
+}
+.header-title-wrap {
+    display: flex;
+    align-items: flex-end;
+    text-align: end;
+}
+.header-title {
+    display: inline-block;
+    margin: 1.5rem 0 0;
+
+    h1 {
+        font-family: $cursive;
+        font-size: 6.5rem;
+        line-height: 4.5rem;
+        font-weight: 900;
+        color: $pink;
+    }
+}
+
+.nav-links-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+
+    .nav-link {
+        font-family: $serif;
+        color: $purple;
+        padding: 0;
+        font-size: 2.75rem;
+        line-height: 3rem;
+        border-bottom: .2rem solid transparent;
+        letter-spacing: .15rem;
+        
+        &:hover, &:active {
+            color: $navy-light;
+            border-bottom: .15rem solid $navy-light;
+        }
+    }
+}

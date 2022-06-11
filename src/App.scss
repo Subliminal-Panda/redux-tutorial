@@ -1,0 +1,78 @@
+@import './variables.scss';
+
+* {
+  margin: 0;
+  padding: 0;
+  position: relative;
+  z-index: -1;
+}
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+html, body {
+  font-size: calc(.65vmin + .35vw);
+  color: $navy;
+  font-family: $sans;
+  letter-spacing: .09rem;
+  font-weight: 400;
+  line-height: 1.35em;
+  height: max-content;
+  max-width: 100vw;
+  min-width: 100vw;
+}
+
+body {
+  font-family: $sans;
+  font-weight: 500;
+}
+
+.content {
+  position: relative;
+  margin: 6vh 5vw 0 7vw;
+}
+
+h1 {
+  font-family: $serif;
+  font-weight: 600;
+  font-size: 3rem;
+}
+
+h2 {
+  font-family: $serif;
+  font-weight: 500;
+  font-style: italic;
+  font-size: 3rem;
+}
+
+p {
+  color: $navy;
+  font-family: $sans;
+  margin: 2.5rem;
+  font-size: 2.4rem;
+  line-height: 3rem;
+}
+
+a {
+  font-size: 3rem;
+  text-decoration: none;
+  color: $purple-dark;
+  border-bottom: .12rem solid transparent;
+
+  &:hover {
+      color: $purple-light;
+      text-decoration: none;
+      border-bottom: .12rem solid $purple-light;
+  }
+}
+
+.active {
+  color: $navy;
+  border-bottom: .12rem solid $navy;
+  cursor: default;
+  text-decoration: none;
+}

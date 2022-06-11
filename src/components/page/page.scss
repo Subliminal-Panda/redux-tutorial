@@ -1,0 +1,41 @@
+﻿@import '../../variables.scss';
+
+.page {
+    height: max-content;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    z-index: -1;
+    margin: 14rem 0 3rem;
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    color: $purple-dark;
+    
+    h1, h2 {
+        color: $navy-light;
+        font-size: 6rem;
+        margin: 2.25rem 3vw;
+        font-family: $cursive;
+    }
+
+    h1 {
+        // font-style: italic;
+        font-weight: 900;
+    }
+    
+    p {
+        font-family: $sans;
+        font-weight: 100;
+        font-size: 2.2rem;
+        letter-spacing: .12rem;
+        margin: 1rem 6vw;
+    }
+}
