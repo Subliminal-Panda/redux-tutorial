@@ -11,11 +11,11 @@ export const Header = () => {
         <div className="header">
           <AddPageModal />
           <div className="header-title-wrap">
-            <p className="header-title">
+            <div className="header-title">
               <h1>
                 React Redux Tutorial Site
               </h1>
-            </p>
+            </div>
           </div>
           <div className="nav-links-wrap">
             {Links && Links.map(link => {
