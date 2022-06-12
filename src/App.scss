@@ -24,6 +24,8 @@ html, body {
   height: max-content;
   max-width: 100vw;
   min-width: 100vw;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
