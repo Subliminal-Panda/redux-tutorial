@@ -12,6 +12,10 @@ interface PageComponentProps {
 }
 
 interface PageItemType {
+    page_id?: number
+    order?: number
+    published?: boolean
+    title?: string
     description?: string
     icon_id?: number
     image_id?: number
@@ -19,10 +23,6 @@ interface PageItemType {
     image_url?: string
     link_name?: string
     link_ref?: string
-    order?: number
-    page_id?: number
-    published?: boolean
-    title?: string
 }
 
 export default function Page (props: PageComponentProps) {

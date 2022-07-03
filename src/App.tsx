@@ -49,6 +49,7 @@ const password = 'DummyPassword57'
 //   });
 
 export interface PageType {
+  docId?: string,
   id: number,
   order: number,
   title: string,
@@ -71,8 +72,19 @@ export default function App() {
   async function getPages(db: Firestore) {
     const pagesCollection = collection(db, 'pages');
     const pagesSnapShot = await getDocs(pagesCollection);
-    const pagesList = pagesSnapShot.docs.map(doc => doc.data());
-    return pagesList;
+    const pageArray: PageType[] = []
+    pagesSnapShot.docs.forEach(doc => {
+      const docData = doc.data()
+      const data = {
+        id: docData.id,
+        order: docData.order,
+        title: docData.title,
+        route: docData.route,
+        docID: doc.id,
+      }
+      pageArray.push(data)
+    })
+    return pageArray;
   }
   useEffect(() => {
     getPages(db).then(response => {
@@ -81,6 +93,7 @@ export default function App() {
           setPages(prevPages => [...prevPages, page])
         }
       })
+      console.log("pages response:", response)
     })
   }, [])
   useEffect (() => {

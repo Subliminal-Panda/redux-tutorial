@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Modal } from "react-bootstrap"
+import { Button, Form, InputGroup, Modal } from "react-bootstrap"
 import { PageType } from "../../App";
 import './add-item.scss'
 
@@ -27,7 +27,17 @@ export const AddItemModal = (props: AddItemModalProps) => {
           <Modal.Header closeButton>
             <Modal.Title>Modal</Modal.Title>
           </Modal.Header>
-          <Modal.Body>Modal body content</Modal.Body>
+          <Modal.Body>Modal body content
+            <Form>
+              <InputGroup>
+                <Form.Label>Email address</Form.Label>
+                <Form.Control type="text" placeholder="Enter email" />
+                <Form.Text className="text-muted">
+                  We'll never share your email with anyone else.
+                </Form.Text>
+              </InputGroup>
+            </Form>
+          </Modal.Body>
         </Modal>
       </>
     );
