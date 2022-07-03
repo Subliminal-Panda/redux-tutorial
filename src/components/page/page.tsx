@@ -75,78 +75,44 @@ export default function Page (props: PageComponentProps) {
         background: `no-repeat url(${randomBackground}) rgb(255, 253, 235) center bottom/101% fixed`,
     }
 
+    const filteredPageItems: PageItemType[] = allItems.filter((item: PageItemType) => item.page_id === page.id)
+
     return (
         <div className={"page " + page.route} style={style}>
             <Header pages={pages} />
             <div className="page-content">
-            <AddItemModal page={page} />
-            {allItems && allItems.map(item => {
-                return (
-                    <>
-                        {item.title && 
-                        <h1>
-                            {item.title}
-                        </h1>
-                        }
-                        {item.description && 
-                        <p>
-                            {item.description}
-                        </p>
-                        }
-                        <div className="flex-col">
-                            {item.image_url && 
-                            <img className="image-frame" src={item.image_url} width="500" height="auto"></img>
+                <AddItemModal page={page} />
+                {filteredPageItems && filteredPageItems.map(item => {
+                    return (
+                        <>
+                            {item.title && 
+                            <h1>
+                                {item.title}
+                            </h1>
                             }
-                            {item.image_title && 
-                            <h3>
-                                {item.image_title}
-                            </h3>
+                            {item.description && 
+                            <p>
+                                {item.description}
+                            </p>
                             }
-                        </div>
-                        {item.link_name && item.link_ref && 
-                        <a href={item.link_ref}>
-                            {item.link_name}
-                        </a>
-                        }
-                    </>
-                )
-            })}
-                <h1>
-                    {page.title} page item 1 heading
-                </h1>
-                <p>
-                    {page.title} page item 1 content Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                </p>
-                <p>
-                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-                </p>
-                <h1>
-                    {page.title} page item 2 heading
-                </h1>
-                <p>
-                    {page.title} page item 2 content Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                </p>
-                <p>
-                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-                </p>
-                <h1>
-                    {page.title} page item 3 heading
-                </h1>
-                <p>
-                    {page.title} page item 3 content Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                </p>
-                <p>
-                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-                </p>
-                <h1>
-                    {page.title} page item 4 heading
-                </h1>
-                <p>
-                    {page.title} page item 4 content Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.
-                </p>
-                <p>
-                    Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
-                </p>
+                            <div className="flex-col">
+                                {item.image_url && 
+                                <img className="image-frame" src={item.image_url} width="500" height="auto"></img>
+                                }
+                                {item.image_title && 
+                                <h3>
+                                    {item.image_title}
+                                </h3>
+                                }
+                            </div>
+                            {item.link_name && item.link_ref && 
+                            <a href={item.link_ref}>
+                                {item.link_name}
+                            </a>
+                            }
+                        </>
+                    )
+                })}
             </div>
         </div>
     )
