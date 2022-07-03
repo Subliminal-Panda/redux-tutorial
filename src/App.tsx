@@ -57,12 +57,12 @@ export interface PageType {
 }
 
 export default function App() {
-  const [pages, setPages] = useState<DocumentData[]>([{
+  const [pages, setPages] = useState<PageType[]>([{
     order: 0,
     id: 1,
     title: "Home / Bio",
     route: "home"
-  }] as PageType[])
+  }])
   const [sortedPages, setSortedPages] = useState<PageType[]>([{
     order: 0,
     id: 1,
@@ -74,15 +74,15 @@ export default function App() {
     const pagesSnapShot = await getDocs(pagesCollection);
     const pageArray: PageType[] = []
     pagesSnapShot.docs.forEach(doc => {
-      const docData = doc.data()
-      const data = {
-        id: docData.id,
-        order: docData.order,
-        title: docData.title,
-        route: docData.route,
-        docID: doc.id,
+      const data = doc.data()
+      const pageData: PageType = {
+        id: data.id,
+        order: data.order,
+        title: data.title,
+        route: data.route,
+        docId: doc.id,
       }
-      pageArray.push(data)
+      pageArray.push(pageData)
     })
     return pageArray;
   }

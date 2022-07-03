@@ -23,11 +23,12 @@ interface PageItemType {
     image_url?: string
     link_name?: string
     link_ref?: string
+    docId?: string
 }
 
 export default function Page (props: PageComponentProps) {
     const { page, pages } = props
-    const [allItems, setAllItems] = useState<DocumentData[]>([] as PageItemType[])
+    const [allItems, setAllItems] = useState<PageItemType[]>([])
 
     const trees1 = 'https://i.imgur.com/UoD91zv.png'
     const trees2 = 'https://i.imgur.com/D9no82p.png'
@@ -53,8 +54,26 @@ export default function Page (props: PageComponentProps) {
     async function getItems(db: Firestore) {
         const itemsCollection = collection(db, 'items');
         const itemsSnapShot = await getDocs(itemsCollection);
-        const itemsList = itemsSnapShot.docs.map(doc => doc.data());
-        return itemsList;
+        const itemsArray: PageItemType[] = []
+        itemsSnapShot.docs.forEach(doc => {
+            const data = doc.data()
+            const itemData: PageItemType = {
+                page_id: data.page_id,
+                order: data.order,
+                published: data.published,
+                title: data.title,
+                description: data.description,
+                icon_id: data.icon_id,
+                image_id: data.image_id,
+                image_title: data.image_title,
+                image_url: data.image_url,
+                link_name: data.link_name,
+                link_ref: data.link_ref,
+                docId: doc.id
+            }
+            itemsArray.push(itemData)
+        })
+        return itemsArray;
       }
 
     useEffect(() => {
@@ -81,7 +100,7 @@ export default function Page (props: PageComponentProps) {
         <div className={"page " + page.route} style={style}>
             <Header pages={pages} />
             <div className="page-content">
-                <AddItemModal page={page} />
+                <AddItemModal page={page} pages={pages} />
                 {filteredPageItems && filteredPageItems.map(item => {
                     return (
                         <>

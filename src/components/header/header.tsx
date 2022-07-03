@@ -22,7 +22,7 @@ export default function Header (props: HeaderComponentProps) {
           <div className="header-title-wrap">
             <div className="header-title">
               <h1>
-                React Redux Tutorial Site
+                Tyler Mortenson's Portfolio
               </h1>
             </div>
           </div>
