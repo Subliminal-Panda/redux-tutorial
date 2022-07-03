@@ -1,11 +1,20 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { Link } from "react-router-dom";
 import { AddPageModal } from "../modals/add-page";
 import './header.scss';
+import { PageType } from "../../App";
 
-export const Links: string[] = ["First", "Second", "Third", "About", "Contact"]
 
-export const Header = () => {
+interface HeaderComponentProps {
+  pages: PageType[]
+}
+export default function Header (props: HeaderComponentProps) {
+  const { pages } = props
+  const [sortedPages, setSortedPages] = useState<PageType[]>([])
+  useEffect (() => {
+    setSortedPages(pages.sort((a, b) => a.order - b.order));
+  }, [pages])
+  
     return (
       <div className="header-wrap">
         <div className="header">
@@ -18,10 +27,12 @@ export const Header = () => {
             </div>
           </div>
           <div className="nav-links-wrap">
-            {Links && Links.map(link => {
-              return (
-                <Link className="nav-link" to={"/" + link}>{link}</Link>
-                )
+            {sortedPages && sortedPages.map(page => {
+              if (typeof page.title === "string" && typeof page.route === "string") {
+                return (
+                  <Link className="nav-link" to={"/" + page.route}>{page.title}</Link>
+                  )
+                }
               })}
           </div>
         </div>

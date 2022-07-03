@@ -1,82 +1,104 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { store } from './app/store';
-import { Links } from './components/header/header';
-import { Page } from './components/page/page';
+import Page from './components/page/page';
 import { FirebaseApp } from 'firebase/app';
-// Import the functions you need from the SDKs you need
-
+import { getFirestore, collection, getDocs, Firestore, DocumentData } from 'firebase/firestore/lite';
 import { initializeApp } from "firebase/app";
-
-import { getAnalytics } from "firebase/analytics";
-
-// TODO: Add SDKs for Firebase products that you want to use
-
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-
-// Your web app's Firebase configuration
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { Analytics, getAnalytics } from "firebase/analytics";
+import { Auth, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+// Import the functions you need from the SDKs you need
+// Follow this pattern to import other Firebase services
+// import { } from 'firebase/<service>';
 
 const firebaseConfig = {
-
-  apiKey: "AIzaSyD3Y6vVk1dfnGARricg_-J9HtMQutKMMok",
-
-  authDomain: "portfolio-ed54d.firebaseapp.com",
-
-  projectId: "portfolio-ed54d",
-
-  storageBucket: "portfolio-ed54d.appspot.com",
-
-  messagingSenderId: "816685952890",
-
-  appId: "1:816685952890:web:75ded5c7632676c86870c3",
-
-  measurementId: "G-HEDGT9JQ5G"
+  apiKey: "AIzaSyBsO-E829V6dg-zpLaIMVh9vqW8ROTK8ro",
+  authDomain: "nature-portfolio-3b346.firebaseapp.com",
+  databaseURL: "https://nature-portfolio-3b346-default-rtdb.firebaseio.com",
+  projectId: "nature-portfolio-3b346",
+  storageBucket: "nature-portfolio-3b346.appspot.com",
+  messagingSenderId: "147305952973",
+  appId: "1:147305952973:web:6d68373cc46cc2f9059b84",
+  measurementId: "G-4232TZN14H"
 
 };
 
-
 // Initialize Firebase
 
-const app: FirebaseApp = initializeApp(firebaseConfig);
+export const firebaseApp: FirebaseApp = initializeApp(firebaseConfig);
+export const db: Firestore = getFirestore(firebaseApp);
+export const auth: Auth = getAuth(firebaseApp);
+export const analytics: Analytics = getAnalytics(firebaseApp);
 
-const analytics = getAnalytics(app);
+const email = 'tmouritsen57@gmail.com'
+const password = 'DummyPassword57'
 
-// document.addEventListener('DOMContentLoaded', function() {
-//   const loadEl = document.querySelector('#load');
-//   const scriptsArray = ["/__/firebase/9.8.3/firebase-app-compat.js", "/__/firebase/9.8.3/firebase-auth-compat.js", "/__/firebase/9.8.3/firebase-database-compat.js", "/__/firebase/9.8.3/firebase-firestore-compat.js", "/__/firebase/9.8.3/firebase-functions-compat.js", "/__/firebase/9.8.3/firebase-messaging-compat.js", "/__/firebase/9.8.3/firebase-storage-compat.js", "/__/firebase/9.8.3/firebase-analytics-compat.js", "/__/firebase/9.8.3/firebase-remote-config-compat.js", "/__/firebase/9.8.3/firebase-performance-compat.js", "/__/firebase/init.js?useEmulator=true"]
-//   let tempEl = document.createElement('div')
-//   tempEl.innerHTML = ''
-//   let scripts = tempEl.getElementsByTagName('script')
+// createUserWithEmailAndPassword(auth, email, password)
+//   .then((userCredential) => {
+//     // Signed in 
+//     const user = userCredential.user;
+//     console.log(user)
+//     // ...
+//   })
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     console.log("error:", errorCode, errorMessage)
+//     // ..
+//   });
 
-//   for (let i = 0; i < scriptsArray.length; i++) {
-//     let script = document.createElement('script');
-//     script.type='text/javascript';
-//     if(scriptsArray[i]) {
-//       script.src = scriptsArray[i];
-//     }
-//     else {
-//         script.innerHTML = scriptsArray[i]
-//         eval(scripts[i].innerHTML)
-//     } 
-//     document.getElementsByTagName("head")[0].appendChild(script);
-//   }
-// });
+export interface PageType {
+  id: number,
+  order: number,
+  title: string,
+  route: string
+}
 
-function App() {
+export default function App() {
+  const [pages, setPages] = useState<DocumentData[]>([{
+    order: 0,
+    id: 1,
+    title: "Home / Bio",
+    route: "home"
+  }] as PageType[])
+  const [sortedPages, setSortedPages] = useState<PageType[]>([{
+    order: 0,
+    id: 1,
+    title: "Home / Bio",
+    route: "home"
+  }])
+  async function getPages(db: Firestore) {
+    const pagesCollection = collection(db, 'pages');
+    const pagesSnapShot = await getDocs(pagesCollection);
+    const pagesList = pagesSnapShot.docs.map(doc => doc.data());
+    return pagesList;
+  }
+  useEffect(() => {
+    getPages(db).then(response => {
+      response.forEach(page => {
+        if (!pages.includes(page)) {
+          setPages(prevPages => [...prevPages, page])
+        }
+      })
+    })
+  }, [])
+  useEffect (() => {
+    setSortedPages(pages.sort((a, b) => a.order - b.order) as PageType[]);
+  }, [pages])
+  
   return (
   <>
     <Provider store={store}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Page pageName="Home" />} />
-          {Links && Links.map(link => {
-            return(
-              <Route path={"/" + link} element={<Page pageName={link} />}/>
-              )
+          <Route path={"/"} element={<Page page={sortedPages[0]} pages={sortedPages} />}/>
+          {sortedPages && sortedPages.map(page => {
+            if (typeof page.route === "string" && typeof page.title === "string") {
+              return(
+                <Route path={"/" + page.route} element={<Page page={page} pages={sortedPages} />}/>
+                )
+              }
             })}
         </Routes>
       </BrowserRouter>
@@ -85,5 +107,3 @@ function App() {
   </>
   );
 }
-
-export default App;

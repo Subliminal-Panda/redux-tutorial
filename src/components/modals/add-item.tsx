@@ -1,9 +1,13 @@
 import { useState } from "react";
 import { Button, Modal } from "react-bootstrap"
+import { PageType } from "../../App";
 import './add-item.scss'
 
-export const AddItemModal = (props: any) => {
-    const { pageName } = props
+interface AddItemModalProps {
+  page: PageType
+}
+export const AddItemModal = (props: AddItemModalProps) => {
+    const { page } = props
     const [show, setShow] = useState(false);
   
     const handleShow = () => {
@@ -14,7 +18,7 @@ export const AddItemModal = (props: any) => {
         <>
         <div className="button-wrap">
           <Button key={"something"} className="me-2" onClick={() => handleShow()}>
-            Add {pageName} Page Item
+            Add {page.title} Page Item
           </Button>
         </div>
         <Modal 
