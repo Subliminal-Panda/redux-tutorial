@@ -12,7 +12,7 @@ export default function Header (props: HeaderComponentProps) {
   const { pages } = props
   const [sortedPages, setSortedPages] = useState<PageType[]>([])
   useEffect (() => {
-    setSortedPages(pages.sort((a, b) => a.order - b.order));
+    setSortedPages(pages.sort((a, b) => a.id - b.id));
   }, [pages])
   
     return (

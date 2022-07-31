@@ -1,9 +1,13 @@
+import { ContentState, convertToRaw, EditorState } from "draft-js"
 import { collection, DocumentData, Firestore, getDocs } from "firebase/firestore/lite"
+import htmlToDraft from "html-to-draftjs"
 import React, { useEffect, useState } from "react"
+import { RawDraftContentState } from "react-draft-wysiwyg"
 import { db, PageType } from "../../App"
 import Header from "../header/header"
 import { AddItemModal } from "../modals/add-item"
 import "./page.scss"
+import ReactHtmlParser from "react-html-parser"
 // import { collection, doc, setDoc } from "firebase/firestore";
 
 interface PageComponentProps {
@@ -11,15 +15,15 @@ interface PageComponentProps {
     pages: PageType[]
 }
 
-interface PageItemType {
+export interface PageItemType {
+    id: number
     page_id?: number
-    order?: number
     published?: boolean
     title?: string
-    description?: string
+    content?: string
     icon_id?: number
     image_id?: number
-    image_title?: string
+    image_caption?: string
     image_url?: string
     link_name?: string
     link_ref?: string
@@ -58,14 +62,14 @@ export default function Page (props: PageComponentProps) {
         itemsSnapShot.docs.forEach(doc => {
             const data = doc.data()
             const itemData: PageItemType = {
+                id: data.id,
                 page_id: data.page_id,
-                order: data.order,
                 published: data.published,
                 title: data.title,
-                description: data.description,
+                content: data.content,
                 icon_id: data.icon_id,
                 image_id: data.image_id,
-                image_title: data.image_title,
+                image_caption: data.image_caption,
                 image_url: data.image_url,
                 link_name: data.link_name,
                 link_ref: data.link_ref,
@@ -81,14 +85,10 @@ export default function Page (props: PageComponentProps) {
             response.forEach(item => {
                 if (!allItems.includes(item)) {
                     setAllItems(prevItems => [...prevItems, item])
-                    console.log('item added:', item)
                 }
             })
         })
     }, [])
-    useEffect(() => {
-        console.log('all items changed.', allItems)
-    }, [allItems.length])
 
     const style = {
         background: `no-repeat url(${randomBackground}) rgb(255, 253, 235) center bottom/101% fixed`,
@@ -96,6 +96,7 @@ export default function Page (props: PageComponentProps) {
 
     const filteredPageItems: PageItemType[] = allItems.filter((item: PageItemType) => item.page_id === page.id)
 
+    
     return (
         <div className={"page " + page.route} style={style}>
             <Header pages={pages} />
@@ -109,18 +110,18 @@ export default function Page (props: PageComponentProps) {
                                 {item.title}
                             </h1>
                             }
-                            {item.description && 
+                            {item.content &&
                             <p>
-                                {item.description}
+                                {ReactHtmlParser(item.content)}
                             </p>
                             }
                             <div className="flex-col">
                                 {item.image_url && 
                                 <img className="image-frame" src={item.image_url} width="500" height="auto"></img>
                                 }
-                                {item.image_title && 
+                                {item.image_caption && 
                                 <h3>
-                                    {item.image_title}
+                                    {item.image_caption}
                                 </h3>
                                 }
                             </div>

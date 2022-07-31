@@ -4,13 +4,12 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { store } from './app/store';
 import Page from './components/page/page';
 import { FirebaseApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, Firestore, DocumentData } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs, setDoc, doc, Firestore, DocumentData, addDoc, deleteDoc } from 'firebase/firestore/lite';
 import { initializeApp } from "firebase/app";
 import { Analytics, getAnalytics } from "firebase/analytics";
 import { Auth, getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-// Import the functions you need from the SDKs you need
-// Follow this pattern to import other Firebase services
-// import { } from 'firebase/<service>';
+import "firebase/firestore";
+import { Timestamp } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBsO-E829V6dg-zpLaIMVh9vqW8ROTK8ro",
@@ -31,14 +30,13 @@ export const db: Firestore = getFirestore(firebaseApp);
 export const auth: Auth = getAuth(firebaseApp);
 export const analytics: Analytics = getAnalytics(firebaseApp);
 
-const email = 'tmouritsen57@gmail.com'
-const password = 'DummyPassword57'
+// const email = 'tmouritsen57@gmail.com'
+// const password = 'DummyPassword57'
 
 // createUserWithEmailAndPassword(auth, email, password)
 //   .then((userCredential) => {
 //     // Signed in 
 //     const user = userCredential.user;
-//     console.log(user)
 //     // ...
 //   })
 //   .catch((error) => {
@@ -51,20 +49,17 @@ const password = 'DummyPassword57'
 export interface PageType {
   docId?: string,
   id: number,
-  order: number,
   title: string,
   route: string
 }
 
 export default function App() {
   const [pages, setPages] = useState<PageType[]>([{
-    order: 0,
     id: 1,
     title: "Home / Bio",
     route: "home"
   }])
   const [sortedPages, setSortedPages] = useState<PageType[]>([{
-    order: 0,
     id: 1,
     title: "Home / Bio",
     route: "home"
@@ -75,17 +70,39 @@ export default function App() {
     const pageArray: PageType[] = []
     pagesSnapShot.docs.forEach(doc => {
       const data = doc.data()
+      const ref = doc.ref
       const pageData: PageType = {
         id: data.id,
-        order: data.order,
         title: data.title,
         route: data.route,
         docId: doc.id,
+      }
+      if (pageData.id && pageData.route && pageData.title && !data.docId) {
+        setDoc(ref, pageData)
       }
       pageArray.push(pageData)
     })
     return pageArray;
   }
+
+  // Make the page order (and page item order) tracked in an array of ids, so the order can change without changing the db doc!
+
+  // creating a new page doc:
+  // useEffect(() => {
+  //   const newDocRef = doc(collection(db, 'pages'))
+  //   const docData = {
+  //     id: 57,
+  //     title: 'Fake Made Up Page',
+  //     route: 'fake',
+  //     docId: newDocRef.id
+  //   };
+  //   setDoc(doc(db, 'pages', newDocRef.id), docData);
+  // }, []);
+
+  // deleting a doc:
+  // const newDocRef = doc(collection(db, 'pages'))
+  // deleteDoc(ref)
+
   useEffect(() => {
     getPages(db).then(response => {
       response.forEach(page => {
@@ -93,11 +110,11 @@ export default function App() {
           setPages(prevPages => [...prevPages, page])
         }
       })
-      console.log("pages response:", response)
     })
   }, [])
+
   useEffect (() => {
-    setSortedPages(pages.sort((a, b) => a.order - b.order) as PageType[]);
+    setSortedPages(pages.sort((a, b) => a.id - b.id) as PageType[]);
   }, [pages])
   
   return (

@@ -22,17 +22,17 @@
 }
 .header-title-wrap {
     display: flex;
-    align-items: flex-end;
-    text-align: end;
+    align-items: center;
+    text-align: center;
 }
 .header-title {
     display: inline-block;
-    margin: 1.5rem 0 0;
+    margin: 1rem 0 0;
 
     h1 {
         font-family: $cursive;
-        font-size: 6.5rem;
-        line-height: 4.5rem;
+        font-size: 6rem;
+        line-height: 6rem;
         font-weight: 900;
         color: $pink;
     }
