@@ -10,11 +10,10 @@
   margin-block-start: 0;
   margin-block-end: 0;
   font-weight: 500;
-  line-height: 1.35;
 }
 
 html, body {
-  font-size: calc(.65vmin + .35vw);
+  font-size: calc(1vw);
   color: $navy;
   font-family: $sans;
   letter-spacing: .09rem;
@@ -59,7 +58,6 @@ p {
 }
 
 a {
-  font-size: 3rem;
   text-decoration: none;
   color: $purple-dark;
   border-bottom: .12rem solid transparent;

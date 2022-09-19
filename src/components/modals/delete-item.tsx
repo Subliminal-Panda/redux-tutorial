@@ -14,7 +14,7 @@ interface AddItemModalProps {
   page: PageType
   pages: PageType[]
 }
-export const AddItemModal = (props: AddItemModalProps) => {
+export const DeleteItemModal = (props: AddItemModalProps) => {
     const { page, pages } = props
     const [show, setShow] = useState(false);
     const [formState, setFormState] = useState({

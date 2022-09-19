@@ -1,7 +1,7 @@
 {
   "projects": {
-    "default": "nature-portfolio-3b346",
-    "tm-portfolio": "nature-portfolio-3b346"
+    "default": "tm-portfolio",
+    "tm-portfolio": "tm-portfolio"
   },
   "targets": {}
 }

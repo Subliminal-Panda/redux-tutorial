@@ -23,7 +23,7 @@
     h1, h2 {
         color: $navy-light;
         font-size: 6rem;
-        margin: 2.25rem 3vw;
+        margin: 2rem 3vw .5rem 3vw;
         font-family: $cursive;
     }
 
@@ -48,10 +48,18 @@
     }
 
     .image-frame {
-        background-color: white;
-        border: .1rem solid black;
+        background-image: /* tint image */
+        linear-gradient(to right, rgba(226, 226, 226, 0.75), rgba(226, 226, 226, 0.75)),
+        /* checkered effect */
+        linear-gradient(to right, rgb(80, 80, 80) 50%, rgb(170, 170, 170) 50%),
+        linear-gradient(to bottom, rgb(80, 80, 80) 50%, rgb(170, 170, 170) 50%);
+        background-blend-mode: normal, difference, normal;
+        background-size: 2rem 2rem;
+        border: .3rem solid black;
         border-radius: 1rem;
-        margin: .25rem 6vw;
+        margin: 1rem 6vw .75rem;
+        position: relative;
+        z-index: 100;
     }
 
     a {

@@ -55,12 +55,12 @@ export interface PageType {
 export default function App() {
   const [pages, setPages] = useState<PageType[]>([{
     id: 1,
-    title: "Home / Bio",
+    title: "Home/Bio",
     route: "home"
   }])
   const [sortedPages, setSortedPages] = useState<PageType[]>([{
     id: 1,
-    title: "Home / Bio",
+    title: "Home/Bio",
     route: "home"
   }])
   async function getPages(db: Firestore) {

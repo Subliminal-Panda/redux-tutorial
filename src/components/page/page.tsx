@@ -96,7 +96,7 @@ export default function Page (props: PageComponentProps) {
 
     const filteredPageItems: PageItemType[] = allItems.filter((item: PageItemType) => item.page_id === page.id)
 
-    
+
     return (
         <div className={"page " + page.route} style={style}>
             <Header pages={pages} />
@@ -106,14 +106,14 @@ export default function Page (props: PageComponentProps) {
                     return (
                         <>
                             {item.title && 
-                            <h1>
-                                {item.title}
-                            </h1>
+                            <>
+                                {ReactHtmlParser(item.title)}
+                            </>
                             }
                             {item.content &&
-                            <p>
+                            <>
                                 {ReactHtmlParser(item.content)}
-                            </p>
+                            </>
                             }
                             <div className="flex-col">
                                 {item.image_url && 
@@ -125,8 +125,8 @@ export default function Page (props: PageComponentProps) {
                                 </h3>
                                 }
                             </div>
-                            {item.link_name && item.link_ref && 
-                            <a href={item.link_ref}>
+                            {item.link_name && item.link_ref &&
+                            <a href={(!item.link_ref?.includes('http:') && !item.link_ref?.includes('https:')) ? `https://${item.link_ref}` : item.link_ref}>
                                 {item.link_name}
                             </a>
                             }

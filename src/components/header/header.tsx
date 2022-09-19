@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { AddPageModal } from "../modals/add-page";
 import './header.scss';
 import { PageType } from "../../App";
@@ -22,7 +22,7 @@ export default function Header (props: HeaderComponentProps) {
           <div className="header-title-wrap">
             <div className="header-title">
               <h1>
-                Tyler Mortenson's Portfolio
+                Tyler Mortenson-Hayes
               </h1>
             </div>
           </div>
@@ -30,7 +30,7 @@ export default function Header (props: HeaderComponentProps) {
             {sortedPages && sortedPages.map(page => {
               if (typeof page.title === "string" && typeof page.route === "string") {
                 return (
-                  <Link className="nav-link" to={"/" + page.route}>{page.title}</Link>
+                  <NavLink className="nav-link" to={"/" + page.route}>{page.title}</NavLink>
                   )
                 }
               })}
