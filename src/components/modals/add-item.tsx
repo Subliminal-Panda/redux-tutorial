@@ -10,6 +10,8 @@ import draftToHtml from 'draftjs-to-html';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import React, { Component } from 'react';
 import htmlToDraft from "html-to-draftjs";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
 
 interface AddItemModalProps {
   page: PageType
@@ -106,7 +108,7 @@ export const AddItemModal = (props: AddItemModalProps) => {
         <>
         <div className="button-wrap add-item">
           <Button key={"addPageItem"} className="me-2" onClick={() => handleShow()}>
-            Add Content
+          <FontAwesomeIcon icon={solid('plus')} size='1x' className='page-delete'/> Content
           </Button>
         </div>
         <Modal 

@@ -1,3 +1,5 @@
+import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { collection, doc, getDocs, limit, orderBy, query, setDoc } from "firebase/firestore/lite";
 import { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap"
@@ -50,7 +52,7 @@ export const AddPageModal = () => {
         <>
         <div className="button-wrap add-page">
           <Button key={"addPage"} className="me-2" onClick={() => handleShow()}>
-            Add Page
+          <FontAwesomeIcon icon={solid('plus')} size='1x' className='page-delete'/> Page
           </Button>
         </div>
         <Modal 

@@ -17,21 +17,21 @@ import htmlToDraft from "html-to-draftjs";
 interface EditItemModalProps {
   item: PageItemType
   pages: PageType[]
+  page: PageType
 }
 export const EditItemModal = (props: EditItemModalProps) => {
-    const { item, pages } = props
+    const { item, pages, page } = props
     const [show, setShow] = useState(false);
-    const [page, setPage] = useState<PageType|undefined>(pages[0])
+    // const [page, setPage] = useState<PageType|undefined>(pages.find(p => p.id === item.page_id) || undefined)
     useEffect(() => {
-      if(item.page_id !== undefined) {
-        console.log(pages)
-        setPage(pages.find(p => p.id === item.page_id))
+      if(page !== undefined) {
+        console.log(page)
       }
-    }, [item])
-    let pageTitle = page?.title ? page.title : 'fake title for testing'
+    }, [page])
+    const pageTitle = page?.title ? page.title : 'fake title for testing'
     const [formState, setFormState] = useState({
-      page: pageTitle,
-      title: item.title || '',
+      page: page.title || "",
+      title: item.title || "",
       content: item.content || "",
       imageUrl: item.image_url ||"",
       imageCaption: item.image_caption ||"",

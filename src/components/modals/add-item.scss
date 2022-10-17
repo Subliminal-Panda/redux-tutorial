@@ -1,12 +1,20 @@
 @import '../../variables.scss';
 
-.modal-buttons-wrap {
+.page-buttons-wrap {
     display:flex; 
     flex-direction: row;
     gap: .75rem;
     position: absolute;
     top: 1rem;
     left: 1rem;
+}
+.item-buttons-wrap {
+    display:flex; 
+    flex-direction: row;
+    gap: .75rem;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
 }
 .button-wrap {
     width: max-content;

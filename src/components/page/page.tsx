@@ -13,6 +13,7 @@ import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { AddPageModal } from "../modals/add-page"
 import { EditItemModal } from "../modals/edit-item"
 import { DeleteItemModal } from "../modals/delete-item"
+import { DeletePageModal } from "../modals/delete-page"
 
 // import { collection, doc, setDoc } from "firebase/firestore";
 
@@ -112,12 +113,17 @@ export default function Page (props: PageComponentProps) {
 
     const filteredPageItems: PageItemType[] = allItems.filter((item: PageItemType) => item.page_id === page.id)
 
-
+    useEffect(() => {
+        console.log(page)
+    }, [page])
     return (
         <div className={"page " + page.route} style={style}>
             <Header pages={pages} />
-            <div className="modal-buttons-wrap">
+            <div className="page-buttons-wrap">
                 <AddPageModal />
+                <DeletePageModal pages={pages} />
+            </div>
+            <div className="item-buttons-wrap">
                 <AddItemModal page={page} pages={pages} />
             </div>
             <div className="page-content">
@@ -140,7 +146,7 @@ export default function Page (props: PageComponentProps) {
                                 <></>
                                 }
                                 <div className='item-controls-wrapper'>
-                                    <EditItemModal item={item} pages={pages} />
+                                    <EditItemModal item={item} pages={pages} page={page}/>
                                     <DeleteItemModal item={item} />
                                 </div>
                             </div>

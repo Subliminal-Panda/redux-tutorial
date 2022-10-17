@@ -1,97 +1,81 @@
-import { collection, doc, getDocs, limit, orderBy, query, setDoc } from "firebase/firestore/lite";
-import { useEffect, useState } from "react";
+import { doc, deleteDoc } from "firebase/firestore/lite";
+import React, { useState, useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap"
-import { db } from "../../App";
+import { db, PageType } from "../../App";
 import './add-item.scss'
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import ReactHtmlParser from "react-html-parser"
 
-export const DeletePageModal = () => {
+interface DeletePageModalProps {
+  pages: PageType[]
+}
+export const DeletePageModal = (props: DeletePageModalProps) => {
+    const { pages } = props
     const [show, setShow] = useState(false);
     const [formState, setFormState] = useState({
-      pageName: "",
-      pageRoute: ""
+      page: pages[0]
     })
-  
-    const handleShow = () => {
-      setShow(true);
-    }
-
-    function handleChange(event: React.ChangeEvent<{ value: string, name: string }>) {
-      event.preventDefault();
-      const value = event?.target?.value;
-      setFormState({
-        ...formState,
-        [event?.target?.name]: value
-      });
-    }
 
     async function handleSubmit (event: React.FormEvent) {
       event.preventDefault()
-      const pagesRef = collection(db, 'pages');
-      const q = query(pagesRef, orderBy('id', 'desc'), limit(1))
-      const queryDocs = await getDocs(q)
-      if (!queryDocs.empty) {
-        const highest = queryDocs.docs[0];
-        const data = highest.data();
-        const newDocRef = doc(collection(db, 'pages'))
-        const docData = {
-          id: data.id + 1,
-          title: formState.pageName,
-          route: formState.pageRoute,
-          docId: newDocRef.id
-        };
-        setDoc(doc(db, 'pages', newDocRef.id), docData);
+      if (formState.page.docId !== undefined) {
+        const docRef = doc(db, 'pages', formState.page.docId)
+        await deleteDoc(docRef);
+        console.log('deleted item successfully', docRef)
+        setShow(false)
       } else {
-        console.log('unable to retrieve pages from DB.')
+        console.log('item has no ID', formState.page.id)
       }
-      setShow(false)
     }
-    
+    function handleChange(event: React.ChangeEvent<{ value: string, name: string }>) {
+      event.preventDefault();
+      const value = event?.target?.value;
+      const page = pages.find(p => p.title === value)
+      console.log(value)
+      console.log(page)
+      if (page) {
+        setFormState({
+          page: page
+        });
+      }
+    }
+
     return (
         <>
-        <div className="button-wrap">
-          <Button key={"addPage"} className="me-2" onClick={() => handleShow()}>
-            Add Page
+        <div className="button-wrap add-item">
+          <Button key={"deletePageItem"} className="me-2" onClick={() => setShow(true)}>
+          <FontAwesomeIcon icon={solid('trash')} size='1x' className='page-delete'/> Page
           </Button>
         </div>
-        <Modal 
-        size="xl"
-        centered
-        restoreFocus
-        show={show} 
-        onHide={() => setShow(false)}>
-          <Modal.Header closeButton>
-            <Modal.Title>Add New Site Page:</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+          <Modal size="xl" centered restoreFocus show={show}  onHide={() => setShow(false)}>
+            <Modal.Header closeButton>
+              <Modal.Title>Delete Page?</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
             <Form onSubmit={(event) => handleSubmit(event)}>
               <Form.Group className="mb-3">
-                <Form.Label>Page Name</Form.Label>
-                <Form.Control 
-                type="text" 
-                required 
-                placeholder="Enter a page name" 
-                name="pageName"
-                value={formState.pageName} 
-                onChange={handleChange}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3">
-                <Form.Label>Page Route</Form.Label>
-                <Form.Control 
-                type="text" 
-                required 
-                placeholder="Enter a page route name" 
-                name="pageRoute"
-                value={formState.pageRoute} 
-                onChange={handleChange} 
-                />
-              </Form.Group>
-              <Button type="submit">
-                Submit New Page
-              </Button>
-            </Form>
-          </Modal.Body>
-        </Modal>
+                <Form.Select 
+                      required 
+                      name="page"
+                      value={formState.page.title} 
+                      onChange={handleChange}
+                    >
+                  {pages.map(page => {
+                    if (typeof page.title === 'string') {
+                      return(<option>{page.title}</option>)
+                    }
+                  })}
+                </Form.Select>
+                </Form.Group>
+                </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="primary" onClick={() => setShow(false)}>Cancel</Button>
+              <Button variant="danger" onClick={e => handleSubmit(e)}>Delete Page</Button>
+            </Modal.Footer>
+          </Modal>
       </>
     );
 }
