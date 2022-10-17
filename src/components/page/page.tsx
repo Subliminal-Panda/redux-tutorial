@@ -8,6 +8,12 @@ import Header from "../header/header"
 import { AddItemModal } from "../modals/add-item"
 import "./page.scss"
 import ReactHtmlParser from "react-html-parser"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { solid } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { AddPageModal } from "../modals/add-page"
+import { EditItemModal } from "../modals/edit-item"
+import { DeleteItemModal } from "../modals/delete-item"
+
 // import { collection, doc, setDoc } from "firebase/firestore";
 
 interface PageComponentProps {
@@ -44,6 +50,16 @@ export default function Page (props: PageComponentProps) {
     const [ bgOptions ] = useState([0,1,2,3,4])
     const [ lastThree ] = useState([57])
     const [ randomBackground, setRandomBackground ] = useState(backgroundArray[0])
+
+    // const headerHeight: HTMLElement | null = document.querySelector('.header')
+    // const height = headerHeight?.offsetHeight;
+    // const pageContent: HTMLElement | null = document.querySelector('.page-content')
+
+    // useEffect(() => {
+    //     if (pageContent) {
+    //         pageContent.style.transform = "translateY(" + height + "px)"
+    //     }
+    // }, [height])
     
     useEffect(() => {
         const leftOver = bgOptions.filter(opt => !lastThree.includes(opt))
@@ -100,30 +116,46 @@ export default function Page (props: PageComponentProps) {
     return (
         <div className={"page " + page.route} style={style}>
             <Header pages={pages} />
-            <div className="page-content">
+            <div className="modal-buttons-wrap">
+                <AddPageModal />
                 <AddItemModal page={page} pages={pages} />
+            </div>
+            <div className="page-content">
                 {filteredPageItems && filteredPageItems.map(item => {
+                    const content = (item: PageItemType) => {
+                        if (item.content) {
+                            console.log(ReactHtmlParser(item.content)[0])
+                            return (ReactHtmlParser(item.content)[0])
+                        } else {
+                            return (<></>)
+                        }
+                    }
                     return (
                         <>
-                            {item.title && 
-                            <>
-                                {ReactHtmlParser(item.title)}
-                            </>
-                            }
-                            {item.content &&
-                            <>
-                                {ReactHtmlParser(item.content)}
-                            </>
-                            }
-                            <div className="flex-col">
-                                {item.image_url && 
-                                <img className="image-frame" src={item.image_url} width="500" height="auto"></img>
+                            <div className='title-wrapper'>
+                                {item.title ? 
+                                <>
+                                    {ReactHtmlParser(item.title)}
+                                </> : 
+                                <></>
                                 }
-                                {item.image_caption && 
-                                <h3>
-                                    {item.image_caption}
-                                </h3>
+                                <div className='item-controls-wrapper'>
+                                    <EditItemModal item={item} pages={pages} />
+                                    <DeleteItemModal item={item} />
+                                </div>
+                            </div>
+                            <div className="image-content-wrapper">
+                                <div className="flex-col image-caption-wrapper">
+                                    {item.image_url && 
+                                    <img className="image-frame" src={item.image_url} width="" height="auto"></img>
                                 }
+                                    {item.image_caption && 
+                                    <h3>
+                                        {item.image_caption}
+                                    </h3>
+                                    }
+                                </div>
+                                {content(item)}
                             </div>
                             {item.link_name && item.link_ref &&
                             <a href={(!item.link_ref?.includes('http:') && !item.link_ref?.includes('https:')) ? `https://${item.link_ref}` : item.link_ref}>

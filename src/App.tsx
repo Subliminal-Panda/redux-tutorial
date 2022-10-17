@@ -13,7 +13,7 @@ import { Timestamp } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBsO-E829V6dg-zpLaIMVh9vqW8ROTK8ro",
-  authDomain: "nature-portfolio-3b346.firebaseapp.com",
+  authDomain: "tm-portfolio.firebaseapp.com",
   databaseURL: "https://nature-portfolio-3b346-default-rtdb.firebaseio.com",
   projectId: "nature-portfolio-3b346",
   storageBucket: "nature-portfolio-3b346.appspot.com",

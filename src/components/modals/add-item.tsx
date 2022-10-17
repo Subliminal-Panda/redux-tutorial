@@ -9,6 +9,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import React, { Component } from 'react';
+import htmlToDraft from "html-to-draftjs";
 
 interface AddItemModalProps {
   page: PageType
@@ -27,7 +28,9 @@ export const AddItemModal = (props: AddItemModalProps) => {
       linkText: "",
       published: false,
     })
-    const [titleEditorState, setTitleEditorState] = useState(EditorState.createEmpty())
+    const titleContentBlock = htmlToDraft("<h1></h1>")
+    const titleContentState = ContentState.createFromBlockArray(titleContentBlock.contentBlocks)
+    const [titleEditorState, setTitleEditorState] = useState(EditorState.createWithContent(titleContentState))
     const [contentEditorState, setContentEditorState] = useState(EditorState.createEmpty())
   
     const onTitleEditorStateChange = (titleEditorState: EditorState) => {
@@ -101,9 +104,9 @@ export const AddItemModal = (props: AddItemModalProps) => {
 
     return (
         <>
-        <div className="button-wrap">
+        <div className="button-wrap add-item">
           <Button key={"addPageItem"} className="me-2" onClick={() => handleShow()}>
-            Add Page Item
+            Add Content
           </Button>
         </div>
         <Modal 
@@ -113,7 +116,7 @@ export const AddItemModal = (props: AddItemModalProps) => {
         show={show} 
         onHide={() => setShow(false)}>
           <Modal.Header closeButton>
-            <Modal.Title>Add Page Item:</Modal.Title>
+            <Modal.Title>Add Content:</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form onSubmit={(event) => handleSubmit(event)}>
@@ -199,11 +202,15 @@ export const AddItemModal = (props: AddItemModalProps) => {
                 checked={formState.published} 
                 onChange={handleChange}
               />
-                <Button type="submit">
+                {/* <Button type="submit">
                   Submit Page Item
-                </Button>
+                </Button> */}
             </Form>
           </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={() => setShow(false)}>Cancel</Button>
+            <Button variant="primary" onClick={e => handleSubmit(e)}>Submit Page Item</Button>
+          </Modal.Footer>
         </Modal>
       </>
     );

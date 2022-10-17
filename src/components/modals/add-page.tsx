@@ -48,7 +48,7 @@ export const AddPageModal = () => {
     
     return (
         <>
-        <div className="button-wrap">
+        <div className="button-wrap add-page">
           <Button key={"addPage"} className="me-2" onClick={() => handleShow()}>
             Add Page
           </Button>
@@ -86,11 +86,15 @@ export const AddPageModal = () => {
                 onChange={handleChange} 
                 />
               </Form.Group>
-              <Button type="submit">
+              {/* <Button type="submit">
                 Submit New Page
-              </Button>
+              </Button> */}
             </Form>
           </Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={() => setShow(false)}>Cancel</Button>
+            <Button variant="primary" onClick={e => handleSubmit(e)}>Submit New Page</Button>
+          </Modal.Footer>
         </Modal>
       </>
     );

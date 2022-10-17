@@ -1,5 +1,5 @@
-import { collection, doc, getDocs, limit, orderBy, query, setDoc } from "firebase/firestore/lite";
-import { useState } from "react";
+import { collection, doc, getDocs, limit, orderBy, query, setDoc, updateDoc } from "firebase/firestore/lite";
+import { useState, useEffect } from "react";
 import { Button, Form, Modal } from "react-bootstrap"
 import { db, PageType } from "../../App";
 import { PageItemType } from "../page/page";
@@ -9,26 +9,42 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import ReactHtmlParser from "react-html-parser"
+import htmlToDraft from "html-to-draftjs";
 
-interface AddItemModalProps {
-  page: PageType
+interface EditItemModalProps {
+  item: PageItemType
   pages: PageType[]
 }
-export const EditItemModal = (props: AddItemModalProps) => {
-    const { page, pages } = props
+export const EditItemModal = (props: EditItemModalProps) => {
+    const { item, pages } = props
     const [show, setShow] = useState(false);
+    const [page, setPage] = useState<PageType|undefined>(pages[0])
+    useEffect(() => {
+      if(item.page_id !== undefined) {
+        console.log(pages)
+        setPage(pages.find(p => p.id === item.page_id))
+      }
+    }, [item])
+    let pageTitle = page?.title ? page.title : 'fake title for testing'
     const [formState, setFormState] = useState({
-      page: page.title,
-      title: "",
-      content: "",
-      imageUrl: "",
-      imageCaption: "",
-      link: "",
-      linkText: "",
+      page: pageTitle,
+      title: item.title || '',
+      content: item.content || "",
+      imageUrl: item.image_url ||"",
+      imageCaption: item.image_caption ||"",
+      link: item.link_ref || "",
+      linkText: item.link_name || "",
       published: false,
     })
-    const [titleEditorState, setTitleEditorState] = useState(EditorState.createEmpty())
-    const [contentEditorState, setContentEditorState] = useState(EditorState.createEmpty())
+    const titleContentBlock = htmlToDraft(formState.title)
+    const contentContentBlock = htmlToDraft(formState.content)
+    const titleContentState = ContentState.createFromBlockArray(titleContentBlock.contentBlocks)
+    const contentContentState = ContentState.createFromBlockArray(contentContentBlock.contentBlocks)
+    const [titleEditorState, setTitleEditorState] = useState(EditorState.createWithContent(titleContentState))
+    const [contentEditorState, setContentEditorState] = useState(EditorState.createWithContent(contentContentState))
   
     const onTitleEditorStateChange = (titleEditorState: EditorState) => {
       setTitleEditorState(titleEditorState);
@@ -54,34 +70,25 @@ export const EditItemModal = (props: AddItemModalProps) => {
 
     async function handleSubmit (event: React.FormEvent) {
       event.preventDefault()
-      const itemsRef = collection(db, 'items');
-      const q = query(itemsRef, orderBy('id', 'desc'), limit(1))
-      const queryDocs = await getDocs(q)
-      let data
-      if (!queryDocs.empty) {
-        const highest = queryDocs.docs[0];
-        data = highest.data();
+      if (item.docId !== undefined) {
+        const docRef = doc(db, 'items', item.docId)
+        const pageId = pages.find(p => p.title === formState.page)?.id;
+        const docData = {
+          page_id: pageId,
+          published: formState.published,
+          title: draftToHtml(convertToRaw(titleEditorState.getCurrentContent())),
+          content: draftToHtml(convertToRaw(contentEditorState.getCurrentContent())),
+          image_url: formState.imageUrl,
+          image_caption: formState.imageCaption,
+          link_name: formState.linkText,
+          link_ref: formState.link,
+        };
+        await updateDoc(docRef, docData);
+        console.log('updated item successfully', docRef)
+        setShow(false)
       } else {
-        data = {
-          id: 0
-        }
-        console.log('unable to retrieve items from DB.')
+        console.log('item has no ID', item.id)
       }
-      const newDocRef = doc(collection(db, 'items'))
-      const pageId = pages.find(p => p.title === formState.page)?.id;
-      const docData: PageItemType = {
-        id: data.id ? data.id + 1 : 1,
-        page_id: pageId,
-        published: formState.published,
-        title: draftToHtml(convertToRaw(titleEditorState.getCurrentContent())),
-        content: draftToHtml(convertToRaw(contentEditorState.getCurrentContent())),
-        image_url: formState.imageUrl,
-        image_caption: formState.imageCaption,
-        link_name: formState.linkText,
-        link_ref: formState.link,
-        docId: newDocRef.id
-      };
-      setDoc(doc(db, 'items', newDocRef.id), docData);
       setShow(false)
     }
 
@@ -101,11 +108,7 @@ export const EditItemModal = (props: AddItemModalProps) => {
 
     return (
         <>
-        <div className="button-wrap">
-          <Button key={"addPageItem"} className="me-2" onClick={() => handleShow()}>
-            Add Page Item
-          </Button>
-        </div>
+        <FontAwesomeIcon icon={solid('pencil')} size='4x' className='page-item-edit' onClick={() => handleShow()}/>
         <Modal 
         size="xl"
         centered
@@ -199,11 +202,15 @@ export const EditItemModal = (props: AddItemModalProps) => {
                 checked={formState.published} 
                 onChange={handleChange}
               />
-                <Button type="submit">
-                  Submit Page Item
-                </Button>
+                {/* <Button type="submit">
+                  Submit Updated Page Item
+                </Button> */}
             </Form>
           </Modal.Body>
+          <Modal.Footer>
+              <Button variant="danger" onClick={() => setShow(false)}>Cancel</Button>
+              <Button variant="primary" onClick={e => handleSubmit(e)}>Submit Updated Page Item</Button>
+            </Modal.Footer>
         </Modal>
       </>
     );

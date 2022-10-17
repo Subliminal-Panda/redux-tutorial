@@ -11,7 +11,7 @@
 
 .page-content {
     z-index: 0;
-    margin: 14rem 0 3rem;
+    margin: 1rem 0 3rem;
     width: 100%;
     flex: 1;
     display: flex;
@@ -22,14 +22,14 @@
     
     h1, h2 {
         color: $navy-light;
-        font-size: 6rem;
-        margin: 2rem 3vw .5rem 3vw;
-        font-family: $cursive;
+        font-size: 3.75rem;
+        margin: 1rem 3vw .75rem 3vw;
+        font-family: $serif;
     }
 
     h1 {
         // font-style: italic;
-        font-weight: 900;
+        font-weight: 500;
     }
 
     h3 {
@@ -48,6 +48,9 @@
     }
 
     .image-frame {
+        min-width: 45vw;
+        max-width: 45vw;
+        height: 100%;
         background-image: /* tint image */
         linear-gradient(to right, rgba(226, 226, 226, 0.75), rgba(226, 226, 226, 0.75)),
         /* checkered effect */
@@ -57,9 +60,33 @@
         background-size: 2rem 2rem;
         border: .3rem solid black;
         border-radius: 1rem;
-        margin: 1rem 6vw .75rem;
+        margin: 1rem 2vw .5rem 6vw;
         position: relative;
         z-index: 100;
+    }
+    .title-wrapper {
+        width: 97vw;
+        display:flex;
+        flex-direction:row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .item-controls-wrapper {
+        svg {
+            margin: .75rem;
+        }
+        .page-item-edit {
+            color:rgb(35, 131, 255);
+            &:hover {
+                color:rgb(0, 80, 184);
+            }
+        }
+        .page-item-delete {
+            color:rgb(237, 40, 145);
+            &:hover {
+                color:rgb(167, 0, 89);
+            }
+        }
     }
 
     a {
@@ -72,5 +99,15 @@
     .flex-col {
         display: flex;
         flex-direction: column;
+    }
+    .image-caption-wrapper {
+        float: left;
+        // width: 120px;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+    .image-content-wrapper {
+        overflow: hidden;
     }
 }

@@ -1,15 +1,20 @@
 @import '../../variables.scss';
 
+.modal-buttons-wrap {
+    display:flex; 
+    flex-direction: row;
+    gap: .75rem;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+}
 .button-wrap {
-    padding-right: 5rem;
-    width: 100%;
+    width: max-content;
     display: flex;
     justify-content: flex-end;
-    position: relative;
     z-index: 100;
 
     button {
-        position: fixed;
         z-index: 100;
         font-size: 2rem;
         color: $cream;
@@ -24,6 +29,14 @@
         }
     }
 }
+// .add-page {
+//     right: 18rem;
+//     top: 1rem;
+// }
+// .add-item {
+//     right: 2rem;
+//     top: 1rem;
+// }
 
 .modal-content>.modal-body>form>.input-group>.form-control {
     border-radius: .25rem;

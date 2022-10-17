@@ -1,7 +1,7 @@
 ﻿@import '../../variables.scss';
 
 .header {
-    height: 11.65rem;
+    // height: 10rem;
     width: 100%;
     background-color: $cream-light;
     display: flex;
@@ -10,12 +10,12 @@
     align-items: center;
     border-bottom: .3rem solid $purple-dark;
     z-index: 1;
+    margin-bottom: .19rem;
 }
 
 .header-wrap {
-    height: 12rem;
+    // height: 10.4rem;
     width: 100vw;
-    position: fixed;
     z-index: 1;
     border-bottom: .2rem solid $purple-dark;
     background-color: $cream;
@@ -27,11 +27,11 @@
 }
 .header-title {
     display: inline-block;
-    margin: 1rem 0 0;
+    margin: 0;
 
     h1 {
         font-family: $cursive;
-        font-size: 6rem;
+        font-size: 4rem;
         line-height: 6rem;
         font-weight: 900;
         color: $pink;
@@ -42,11 +42,15 @@
     width: 100%;
     display: flex;
     justify-content: space-evenly;
+    flex-wrap: wrap;
+    padding: .5rem;
+    transition: all .3s ease;
 
     .nav-link {
         font-family: $serif;
         color: $purple;
         padding: 0;
+        margin: .2rem 0;
         font-size: 2.2rem;
         line-height: 3rem;
         border-bottom: .2rem solid transparent;
@@ -58,3 +62,15 @@
         }
     }
 }
+// #nav-links-toggle {
+// 	position: fixed;
+// 	top: 0;
+// 	width: 100%;
+// 	z-index: 100;
+// 	transition: all .3s ease;
+// 	box-shadow: 0 1px 25px rgba(0,0,0, .1);
+// }
+// #nav-links-toggle.hide {
+// 	top: -25rem;
+// }
+
